@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: true
+  
+  tasks:
+  - name: Stopping running container
+    command: docker stop abctechnologies_ansible-container
+	
+  - name: Removing Container
+    command: docker rm abctechnologies_ansible-container
+	
+  - name: Building Docker Image
+    command: docker build -t abctechnologies_ansible .
+	
+  - name: Creating Docker container
+    command: docker run -d --name abctechnologies_ansible-container -p 8082:8080 abctechnologies_ansible;
+	
+  - name: Login to Docker Hub
+    docker_login:
+	 username: vermakeshav1994
+	 password: Keshav@12345
+	 email: vermakeshav1994@gmail.com
+	 
+  - name: Create tag to push image on docker hub
+    command: docker tag abctechnologies_ansible:latest vermakeshav1994/abctechnologies_ansible:latest
+	
+  - name: Push Docker Image to docker hub
+    command: docker push vermakeshav1994/abctechnologies_ansible:latest
