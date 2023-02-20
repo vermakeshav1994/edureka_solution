@@ -1,0 +1,17 @@
+edureka@kmaster:/home/dockeradmin$ cat kube_service.yml
+apiVersion: v1
+kind: Service 
+metadata:
+  name: edureka-service
+  labels:
+    app: edureka-devops-project 
+spec:
+  selector:
+    app: edureka-devops-project
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30000
+
+edureka@kmaster:/home/dockeradmin$ ^C
