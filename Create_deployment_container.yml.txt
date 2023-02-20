@@ -1,0 +1,60 @@
+
+- name: Create pods using deployment 
+
+  hosts: all
+
+  # become: true
+
+  user: dockeradmin
+
+ 
+
+  tasks: 
+
+  - name: building docker image
+
+    command: docker build -t abctechnologies_kubernetes .
+
+    #args:
+
+      #chdir: /opt/dockeradmin
+
+  - name: Log into DockerHub
+
+    docker_login:
+
+     username: vermakeshav1994
+
+     password: Keshav@12345
+
+     email: vermakeshav1994@gmail.com
+
+
+
+  - name: create tag to push image onto dockerhub
+
+    command: docker tag abctechnologies_kubernetes:latest vermakeshav1994/abctechnologies_kubernetes:latest
+
+
+
+  - name: push docker image to docker hub
+
+    command: docker push vermakeshav1994/abctechnologies_kubernetes:latest
+
+
+
+  - name: create a deployment
+
+    command: kubectl apply -f /home/dockeradmin/kube_deploy.yml
+
+
+
+  - name: create a service
+
+    command: kubectl apply -f /home/dockeradmin/kube_service.yml
+
+
+
+  - name: update deployment with new pods if image updated in docker hub
+
+    command: kubectl rollout restart deployment.v1.apps/edureka-deployment
